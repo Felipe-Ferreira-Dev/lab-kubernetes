@@ -8,7 +8,7 @@ data "http" "myip" {
 
 data "aws_ami" "ubuntu" {
   most_recent = true
-  owners = ["099720109477"] # ou ["099720109477"] ID master com permissão para busca
+  owners      = ["099720109477"] # ou ["099720109477"] ID master com permissão para busca
 
   filter {
     name   = "name"
@@ -17,11 +17,11 @@ data "aws_ami" "ubuntu" {
 }
 
 resource "aws_instance" "maquina_master" {
-  ami           = "ami-09e67e426f25ce0d7"
-  instance_type = "t2.medium"
+  ami                         = "ami-09e67e426f25ce0d7"
+  instance_type               = "t2.medium"
   key_name                    = "key-dev-tf"
   associate_public_ip_address = true
-    root_block_device {
+  root_block_device {
     encrypted   = true
     volume_size = 20
   }
@@ -35,11 +35,11 @@ resource "aws_instance" "maquina_master" {
 }
 
 resource "aws_instance" "workers" {
-  ami           = "ami-09e67e426f25ce0d7"
-  instance_type = "t2.micro"
+  ami                         = "ami-09e67e426f25ce0d7"
+  instance_type               = "t2.micro"
   key_name                    = "key-dev-tf"
   associate_public_ip_address = true
-    root_block_device {
+  root_block_device {
     encrypted   = true
     volume_size = 20
   }
@@ -47,13 +47,14 @@ resource "aws_instance" "workers" {
     Name = "k8s-node-ffaihdw-${count.index}"
   }
   vpc_security_group_ids = ["${aws_security_group.acessos_workers.id}"]
-  count         = 2
+  count                  = 2
 }
 
 
 resource "aws_security_group" "acessos_master" {
   name        = "acessos_master"
   description = "acessos_workers inbound traffic"
+  vpc_id      = "vpc-080da39cf7b8a7fdc"
 
   ingress = [
     {
@@ -63,24 +64,24 @@ resource "aws_security_group" "acessos_master" {
       protocol         = "tcp"
       cidr_blocks      = ["${chomp(data.http.myip.body)}/32"]
       ipv6_cidr_blocks = ["::/0"]
-      prefix_list_ids = null,
-      security_groups: null,
-      self: null
+      prefix_list_ids  = null,
+      security_groups : null,
+      self : null
     },
     {
-      description      = "Libera porta kubernetes"
-      from_port        = 6443
-      to_port          = 6443
-      protocol         = "tcp"
-      cidr_blocks      = [
+      description = "Libera porta kubernetes"
+      from_port   = 6443
+      to_port     = 6443
+      protocol    = "tcp"
+      cidr_blocks = [
         "${chomp(data.http.myip.body)}/32",
         "${aws_instance.workers[0].private_ip}/32",
         "${aws_instance.workers[1].private_ip}/32",
       ]
       ipv6_cidr_blocks = ["::/0"]
-      prefix_list_ids = null,
-      security_groups: null,
-      self: null
+      prefix_list_ids  = null,
+      security_groups : null,
+      self : null
     },
   ]
 
@@ -91,10 +92,10 @@ resource "aws_security_group" "acessos_master" {
       protocol         = "-1"
       cidr_blocks      = ["0.0.0.0/0"]
       ipv6_cidr_blocks = ["::/0"],
-      prefix_list_ids = null,
-      security_groups: null,
-      self: null,
-      description: "Libera dados da rede interna"
+      prefix_list_ids  = null,
+      security_groups : null,
+      self : null,
+      description : "Libera dados da rede interna"
     }
   ]
 
@@ -107,7 +108,7 @@ resource "aws_security_group" "acessos_master" {
 resource "aws_security_group" "acessos_workers" {
   name        = "acessos_workers"
   description = "acessos_workers inbound traffic"
-
+  vpc_id      = "vpc-080da39cf7b8a7fdc"
   ingress = [
     {
       description      = "SSH from VPC"
@@ -116,9 +117,9 @@ resource "aws_security_group" "acessos_workers" {
       protocol         = "tcp"
       cidr_blocks      = ["${chomp(data.http.myip.body)}/32"]
       ipv6_cidr_blocks = ["::/0"]
-      prefix_list_ids = null,
-      security_groups: null,
-      self: null
+      prefix_list_ids  = null,
+      security_groups : null,
+      self : null
     },
   ]
 
@@ -129,10 +130,10 @@ resource "aws_security_group" "acessos_workers" {
       protocol         = "-1"
       cidr_blocks      = ["0.0.0.0/0"]
       ipv6_cidr_blocks = ["::/0"],
-      prefix_list_ids = null,
-      security_groups: null,
-      self: null,
-      description: "Libera dados da rede interna"
+      prefix_list_ids  = null,
+      security_groups : null,
+      self : null,
+      description : "Libera dados da rede interna"
     }
   ]
 
@@ -153,6 +154,6 @@ output "maquina_master" {
 output "aws_instance_e_ssh" {
   value = [
     for key, item in aws_instance.workers :
-      "worker ${key+1} - ${item.public_ip} - ssh -i ~/projetos/devops/id_rsa_itau_treinamento ubuntu@${item.public_dns}"
+    "worker ${key + 1} - ${item.public_ip} - ssh -i ~/projetos/devops/id_rsa_itau_treinamento ubuntu@${item.public_dns}"
   ]
 }
