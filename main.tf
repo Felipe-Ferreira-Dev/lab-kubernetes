@@ -59,28 +59,32 @@ resource "aws_security_group" "acessos_master" {
   vpc_id      = "vpc-080da39cf7b8a7fdc"
 
   ingress = [
-    {
-      description      = "SSH from VPC"
-      from_port        = 22
-      to_port          = 22
-      protocol         = "tcp"
-      cidr_blocks      = ["0.0.0.0/0"]
-      ipv6_cidr_blocks = ["::/0"]
-      prefix_list_ids  = null,
-      security_groups : null,
-      self : null
-    },
-    {
-      description      = "Libera porta kubernetes"
-      from_port        = 6443
-      to_port          = 6443
-      protocol         = "tcp"
-      cidr_blocks      = ["0.0.0.0/0"]
-      ipv6_cidr_blocks = ["::/0"]
-      prefix_list_ids  = null,
-      security_groups : null,
-      self : null
-    },
+       {
+     cidr_blocks      = [
+           "0.0.0.0/0",
+        ]
+       description      = "SSH from VPC"
+       from_port        = 22
+       ipv6_cidr_blocks = []
+       prefix_list_ids  = []
+       protocol         = "tcp"
+       security_groups  = []
+       self             = false
+       to_port          = 22
+      },
+      {
+         cidr_blocks      = []
+         description      = ""
+         from_port        = 0
+         ipv6_cidr_blocks = []
+         prefix_list_ids  = []
+         protocol         = "tcp"
+         security_groups  = [
+             "sg-0b844b8de4544cf09"
+          ]
+         self             = false
+         to_port          = 65535
+    }
   ]
 
   egress = [
@@ -108,17 +112,32 @@ resource "aws_security_group" "acessos_workers" {
   description = "acessos_workers inbound traffic"
   vpc_id      = "vpc-080da39cf7b8a7fdc"
   ingress = [
-    {
-      description      = "SSH from VPC"
-      from_port        = 22
-      to_port          = 22
-      protocol         = "tcp"
-      cidr_blocks      = ["0.0.0.0/0"]
-      ipv6_cidr_blocks = ["::/0"]
-      prefix_list_ids  = null,
-      security_groups : null,
-      self : null
-    },
+     {
+     cidr_blocks      = [
+           "0.0.0.0/0",
+        ]
+       description      = "SSH from VPC"
+       from_port        = 22
+       ipv6_cidr_blocks = []
+       prefix_list_ids  = []
+       protocol         = "tcp"
+       security_groups  = []
+       self             = false
+       to_port          = 22
+      },
+      {
+         cidr_blocks      = []
+         description      = ""
+         from_port        = 0
+         ipv6_cidr_blocks = []
+         prefix_list_ids  = []
+         protocol         = "tcp"
+         security_groups  = [
+             "sg0575b2e79ee6ebd06",
+          ]
+         self             = false
+         to_port          = 65535
+    }
   ]
 
   egress = [
