@@ -8,6 +8,7 @@ resource "aws_instance" "k8s_proxy" {
   key_name      = "key-dev-tf"
   subnet_id     = "subnet-0b6ee665d5b518339"
   instance_type = "t2.micro"
+  associate_public_ip_address = true
   root_block_device {
     encrypted   = true
     volume_size = 20
