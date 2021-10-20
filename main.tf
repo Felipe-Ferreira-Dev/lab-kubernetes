@@ -141,7 +141,7 @@ resource "aws_security_group" "acessos_workers" {
       prefix_list_ids  = []
       protocol         = "tcp"
       security_groups = [
-       #"${aws_security_group.acessos_master.id}",
+        #"${aws_security_group.acessos_master.id}",
       ]
       self    = false
       to_port = 65535
@@ -222,7 +222,7 @@ resource "aws_security_group" "acessos" {
 output "k8s-masters" {
   value = [
     for key, item in aws_instance.master :
-      "k8s-master ${key+1} - ${item.private_ip}  - ssh -i ~/.ssh/id_rsa_itau ubuntu@${item.public_dns}"
+    "k8s-master ${key + 1} - ${item.private_ip}  - ssh -i ~/.ssh/id_rsa_itau ubuntu@${item.public_dns}"
   ]
 }
 
@@ -230,7 +230,7 @@ output "k8s-masters" {
 output "output-k8s_workers" {
   value = [
     for key, item in aws_instance.k8s_workers :
-      "k8s-workers ${key+1} - ${item.private_ip}  - ssh -i ~/.ssh/id_rsa_itau ubuntu@${item.public_dns}"
+    "k8s-workers ${key + 1} - ${item.private_ip}  - ssh -i ~/.ssh/id_rsa_itau ubuntu@${item.public_dns}"
   ]
 }
 output "output-k8s_proxy" {
