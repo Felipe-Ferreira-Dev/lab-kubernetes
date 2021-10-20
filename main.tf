@@ -34,7 +34,7 @@ resource "aws_instance" "k8s_master" {
   }
   count = 3
   tags = {
-    Name = "k8s-master-ffaihdw-${count.index+1}"
+    Name = "k8s-master-ffaihdw-${count.index + 1}"
   }
   vpc_security_group_ids = ["${aws_security_group.acessos_master.id}"]
 }
@@ -50,7 +50,7 @@ resource "aws_instance" "k8s_workers" {
     volume_size = 20
   }
   tags = {
-    Name = "k8s-node-ffaihdw-${count.index+1}"
+    Name = "k8s-node-ffaihdw-${count.index + 1}"
   }
   vpc_security_group_ids = ["${aws_security_group.acessos_workers.id}"]
   count                  = 3
