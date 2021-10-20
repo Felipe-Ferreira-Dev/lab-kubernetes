@@ -4,10 +4,10 @@ provider "aws" {
 
 
 resource "aws_instance" "k8s_proxy" {
-  ami           = "ami-09e67e426f25ce0d7"
-  key_name      = "key-dev-tf"
-  subnet_id     = "subnet-0b6ee665d5b518339"
-  instance_type = "t2.micro"
+  ami                         = "ami-09e67e426f25ce0d7"
+  key_name                    = "key-dev-tf"
+  subnet_id                   = "subnet-0b6ee665d5b518339"
+  instance_type               = "t2.micro"
   associate_public_ip_address = true
   root_block_device {
     encrypted   = true
