@@ -14,7 +14,7 @@ resource "aws_instance" "k8s_proxy" {
   }
 
   tags = {
-    Name = "k8s-haproxy"
+    Name = "k8s-haproxy-ffaihdw"
   }
   vpc_security_group_ids = ["${aws_security_group.acessos.id}"]
   depends_on = [
@@ -34,7 +34,7 @@ resource "aws_instance" "k8s_master" {
   }
   count = 3
   tags = {
-    Name = "k8s-master-ffaihdw-${count.index}"
+    Name = "k8s-master-ffaihdw-${count.index+1}"
   }
   vpc_security_group_ids = ["${aws_security_group.acessos_master.id}"]
 }
@@ -50,7 +50,7 @@ resource "aws_instance" "k8s_workers" {
     volume_size = 20
   }
   tags = {
-    Name = "k8s-node-ffaihdw-${count.index}"
+    Name = "k8s-node-ffaihdw-${count.index+1}"
   }
   vpc_security_group_ids = ["${aws_security_group.acessos_workers.id}"]
   count                  = 3
@@ -86,7 +86,7 @@ resource "aws_security_group" "acessos_master" {
       prefix_list_ids  = []
       protocol         = "tcp"
       security_groups = [
-        #"${aws_security_group.acessos_workers.id}",
+        "sg-0b844b8de4544cf09",
       ]
       self    = false
       to_port = 65535
@@ -141,7 +141,7 @@ resource "aws_security_group" "acessos_workers" {
       prefix_list_ids  = []
       protocol         = "tcp"
       security_groups = [
-        #"${aws_security_group.acessos_master.id}",
+        "sg-0575b2e79ee6ebd06"
       ]
       self    = false
       to_port = 65535
