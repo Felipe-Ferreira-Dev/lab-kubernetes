@@ -18,7 +18,7 @@ resource "aws_instance" "k8s_proxy" {
   }
   vpc_security_group_ids = ["${aws_security_group.acessos.id}"]
   depends_on = [
-    aws_instance.workers,
+    aws_instance.k8s_workers,
   ]
 }
 
@@ -221,7 +221,7 @@ resource "aws_security_group" "acessos" {
 # terraform refresh para mostrar o ssh
 output "k8s-masters" {
   value = [
-    for key, item in aws_instance.master :
+    for key, item in aws_instance.k8s_master :
     "k8s-master ${key + 1} - ${item.private_ip}  - ssh -i ~/.ssh/id_rsa_itau ubuntu@${item.public_dns}"
   ]
 }
