@@ -90,14 +90,16 @@ resource "aws_security_group" "acessos_master" {
       to_port          = 22
     },
     {
-      cidr_blocks      = []
+      cidr_blocks = [
+        "0.0.0.0/0",
+      ]
       description      = ""
       from_port        = 0
       ipv6_cidr_blocks = []
       prefix_list_ids  = []
       protocol         = "tcp"
       security_groups = [
-        "${aws_security_group.acessos_workers.id}",
+        #"${aws_security_group.acessos_workers.id}",
       ]
       self    = false
       to_port = 65535
@@ -143,14 +145,16 @@ resource "aws_security_group" "acessos_workers" {
       to_port          = 22
     },
     {
-      cidr_blocks      = []
+      cidr_blocks = [
+        "0.0.0.0/0",
+      ]
       description      = ""
       from_port        = 0
       ipv6_cidr_blocks = []
       prefix_list_ids  = []
       protocol         = "tcp"
       security_groups = [
-        "${aws_security_group.acessos_master.id}",
+       #"${aws_security_group.acessos_master.id}",
       ]
       self    = false
       to_port = 65535
@@ -244,6 +248,6 @@ output "aws_instance_e_ssh" {
 
 output "output-k8s_proxy" {
   value = [
-    "k8s_proxy - ${aws_instance.k8s_proxy.private_ip} - ssh -i ~/Desktop/devops/treinamentoItau ubuntu@${aws_instance.k8s_proxy.public_dns}"
+    "k8s_proxy - ${aws_instance.k8s_proxy.private_ip} - ssh -i ~/.ssh/id_rsa_itau ubuntu@${aws_instance.k8s_proxy.public_dns}"
   ]
 }
