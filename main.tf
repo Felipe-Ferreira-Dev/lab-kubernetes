@@ -17,15 +17,15 @@ data "aws_ami" "ubuntu" {
 }
 
 resource "aws_instance" "k8s_proxy" {
-  ami                         = "ami-09e67e426f25ce0d7"
-  key_name                    = "key-dev-tf"
-  subnet_id                   = "subnet-0b6ee665d5b518339"
+  ami           = "ami-09e67e426f25ce0d7"
+  key_name      = "key-dev-tf"
+  subnet_id     = "subnet-0b6ee665d5b518339"
   instance_type = "t2.micro"
   root_block_device {
     encrypted   = true
     volume_size = 20
   }
- 
+
   tags = {
     Name = "k8s-haproxy"
   }
@@ -45,13 +45,13 @@ resource "aws_instance" "maquina_master" {
     encrypted   = true
     volume_size = 20
   }
-  count  = 3
+  count = 3
   tags = {
     Name = "k8s-master-ffaihdw-${count.index}"
   }
-vpc_security_group_ids = ["${aws_security_group.acessos_master.id}"]
+  vpc_security_group_ids = ["${aws_security_group.acessos_master.id}"]
 }
-  
+
 resource "aws_instance" "workers" {
   ami                         = "ami-09e67e426f25ce0d7"
   instance_type               = "t2.medium"
@@ -188,9 +188,9 @@ resource "aws_security_group" "acessos" {
       cidr_blocks      = ["0.0.0.0/0"]
       ipv6_cidr_blocks = ["::/0"],
       prefix_list_ids  = null,
-      security_groups = null,
-      self = null,
-      description = "Libera dados da rede interna"
+      security_groups  = null,
+      self             = null,
+      description      = "Libera dados da rede interna"
     },
     {
       cidr_blocks      = []
@@ -199,11 +199,11 @@ resource "aws_security_group" "acessos" {
       ipv6_cidr_blocks = []
       prefix_list_ids  = []
       protocol         = "-1"
-      security_groups  = [
+      security_groups = [
         "${aws_security_group.acessos_master.id}",
       ]
-      self             = false
-      to_port          = 0
+      self    = false
+      to_port = 0
     }
   ]
 
@@ -214,10 +214,10 @@ resource "aws_security_group" "acessos" {
       protocol         = "-1"
       cidr_blocks      = ["0.0.0.0/0"]
       ipv6_cidr_blocks = [],
-      prefix_list_ids = null,
-      security_groups= null,
-      self= null,
-      description= "Libera dados da rede interna"
+      prefix_list_ids  = null,
+      security_groups  = null,
+      self             = null,
+      description      = "Libera dados da rede interna"
     }
   ]
 
@@ -241,8 +241,8 @@ output "aws_instance_e_ssh" {
     "worker ${key + 1} - ${item.public_ip} - ssh -i ~/.ssh/id_rsa ubuntu@${item.public_dns}"
   ]
 }
-  
-  output "output-k8s_proxy" {
+
+output "output-k8s_proxy" {
   value = [
     "k8s_proxy - ${aws_instance.k8s_proxy.private_ip} - ssh -i ~/Desktop/devops/treinamentoItau ubuntu@${aws_instance.k8s_proxy.public_dns}"
   ]
