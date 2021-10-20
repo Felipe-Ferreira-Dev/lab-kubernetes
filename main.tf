@@ -170,7 +170,7 @@ resource "aws_security_group" "acessos" {
   name        = "k8s-acessos"
   description = "acessos inbound traffic"
   vpc_id      = "vpc-080da39cf7b8a7fdc"
-  
+
   ingress = [
     {
       description      = "SSH from VPC"
