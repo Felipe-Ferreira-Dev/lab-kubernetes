@@ -25,11 +25,14 @@ resource "aws_instance" "k8s_proxy" {
     encrypted   = true
     volume_size = 20
   }
-  key_name      = "treinamento-turma1_itau"
+ 
   tags = {
     Name = "k8s-haproxy"
   }
   vpc_security_group_ids = ["${aws_security_group.acessos.id}"]
+  depends_on = [
+    aws_instance.workers,
+  ]
 }
 
 resource "aws_instance" "maquina_master" {
@@ -46,15 +49,9 @@ resource "aws_instance" "maquina_master" {
   tags = {
     Name = "k8s-master-ffaihdw-${count.index}"
   }
+vpc_security_group_ids = ["${aws_security_group.acessos_master.id}"]
+}
   
-}
-
-  vpc_security_group_ids = ["${aws_security_group.acessos_master.id}"]
-  depends_on = [
-    aws_instance.workers,
-  ]
-}
-
 resource "aws_instance" "workers" {
   ami                         = "ami-09e67e426f25ce0d7"
   instance_type               = "t2.medium"
