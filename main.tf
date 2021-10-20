@@ -232,20 +232,20 @@ resource "aws_security_group" "acessos" {
 
 
 # terraform refresh para mostrar o ssh
-output "maquina_master" {
+output "k8s-masters" {
   value = [
-    "master - ${aws_instance.maquina_master.public_ip} - ssh -i ~/.ssh/id_rsa_itau ubuntu@${aws_instance.maquina_master.public_dns}"
+    for key, item in aws_instance.k8s_masters :
+      "k8s-master ${key+1} - ${item.private_ip}  - ssh -i ~/.ssh/id_rsa_itau ubuntu@${item.public_dns}"
   ]
 }
 
-# terraform refresh para mostrar o ssh
-output "aws_instance_e_ssh" {
+
+output "output-k8s_workers" {
   value = [
-    for key, item in aws_instance.workers :
-    "worker ${key + 1} - ${item.public_ip} - ssh -i ~/.ssh/id_rsa ubuntu@${item.public_dns}"
+    for key, item in aws_instance.k8s_workers :
+      "k8s-workers ${key+1} - ${item.private_ip}  - ssh -i ~/.ssh/id_rsa_itau ubuntu@${item.public_dns}"
   ]
 }
-
 output "output-k8s_proxy" {
   value = [
     "k8s_proxy - ${aws_instance.k8s_proxy.private_ip} - ssh -i ~/.ssh/id_rsa_itau ubuntu@${aws_instance.k8s_proxy.public_dns}"
