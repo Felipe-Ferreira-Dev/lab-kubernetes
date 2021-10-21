@@ -1,5 +1,3 @@
-31 lines (24 sloc)  1.26 KB
-   
 - hosts:
   - ec2-k8s-m2
   - ec2-k8s-m3
