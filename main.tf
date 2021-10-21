@@ -18,9 +18,7 @@ resource "aws_instance" "k8s_proxy" {
     Name = "k8s-haproxy-ffaihdw"
   }
   vpc_security_group_ids = ["${aws_security_group.acessos.id}"]
-  depends_on = [
-    aws_instance.k8s_workers,
-  ]
+
 }
 
 resource "aws_instance" "k8s_master" {
@@ -38,6 +36,9 @@ resource "aws_instance" "k8s_master" {
     Name = "k8s-master-ffaihdw-${count.index + 1}"
   }
   vpc_security_group_ids = ["${aws_security_group.acessos_master.id}"]
+    depends_on = [
+    aws_instance.k8s_workers,
+  ]
 }
 
 resource "aws_instance" "k8s_workers" {
